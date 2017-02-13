@@ -4,8 +4,8 @@ import Column from '../collections/grid/Column.vue'
 
 export default {
     components: {
-        'grid': Grid,
-        'row': Row,
-        'column': Column
+        'ui-grid': Grid,
+        'ui-row': Row,
+        'ui-column': Column
     }
 }

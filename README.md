@@ -6,13 +6,13 @@ Example: `App.vue`
 
 ```html
 <template lang="html">
-  <grid container>
-    <row>
-      <column>
+  <ui-grid container>
+    <ui-row>
+      <ui-column>
         Lorem ipsum dolor sit amet
-      </column>
-    </row>
-  </grid>
+      </ui-column>
+    </ui-row>
+  </ui-grid>
 </template>
 
 <script>
