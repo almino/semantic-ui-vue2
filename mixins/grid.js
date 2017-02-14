@@ -6,6 +6,6 @@ export default {
     components: {
         'ui-grid': Grid,
         'ui-row': Row,
-        'ui-column': Column
+        'ui-column': Column,
     }
 }
