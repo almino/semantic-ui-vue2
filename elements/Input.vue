@@ -2,7 +2,7 @@
     <div v-bind:class="['ui', getSlotsClasses(), getIconClasses(), getSizeClasses(),
         { 'fluid' : fluid }, { 'inverted' : inverted },
         { 'transparent' : transparent }, { 'disabled' : disabled }, 'input',
-        { 'focus' : focus }, { 'loading' : dLoading }, { 'error' : error }]">
+        { 'focus' : focus }, { 'loading' : loading }, { 'error' : error }]">
         <slot name="left-label"></slot>
         <slot name="left-action"></slot>
         <input
@@ -53,45 +53,25 @@
 
 <script>
 import Input from '../mixins/common/input.js'
-import Size from '../mixins/common/six-sizes.js'
+import Focus from '../mixins/common/states/focus.js'
+import Loading from '../mixins/common/states/loading.js'
+import Error from '../mixins/common/states/error.js'
 import Icon from '../mixins/common/icon.js'
+import Inverted from '../mixins/common/inverted.js'
+import Size from '../mixins/common/sizes/six.js'
 
 export default {
-    mixins: [Input, Icon, Size],
+    mixins: [Input, Focus, Loading, Error, Icon, Inverted, Size],
     data() {
         return {
             dIcon: {
                 value: this.icon,
                 position: this.iconPosition
             },
-            dLoading: this.loading
         }
     },
     props: {
-        focus: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        loading: {
-            type: Boolean,
-            required: false,
-            // default: dLoading
-        },
-        error: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
         transparent: {
-            type: Boolean,
-            required: false,
-            default: false
-            // validator(value) {
-            //     return true
-            // }
-        },
-        inverted: {
             type: Boolean,
             required: false,
             default: false
