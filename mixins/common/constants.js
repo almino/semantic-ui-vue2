@@ -1,0 +1,15 @@
+export default {
+    left: 'left',
+    right: 'right',
+    icon: 'icon',
+    massive: 'massive',
+    huge: 'huge',
+    big: 'big',
+    large: 'large',
+    medium: 'medium',
+    small: 'small',
+    tiny: 'tiny',
+    mini: 'mini',
+    width: 'width',
+    equal: 'equal',
+}
