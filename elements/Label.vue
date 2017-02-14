@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Size from '../mixins/common/eight-sizes.js'
+import Size from '../mixins/common/sizes/eight.js'
 
 export default {
     mixins: [Size]
