@@ -5,11 +5,14 @@
 </template>
 
 <script>
+import EqualWidth from '../mixins/common/equal-width.js'
+
 export default {
+    mixins: [EqualWidth],
     props: {
         container: {
-          type: Boolean,
-          default: false
+            type: Boolean,
+            default: false
         }
     }
 }
