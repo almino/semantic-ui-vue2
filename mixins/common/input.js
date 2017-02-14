@@ -1,25 +1,264 @@
-//  ref="input" v-bind:value="value" v-on:input="updateValue($event.target.value)"
+import FocusEvents from './events/focus.js'
+import KeyboardEvents from './events/keyboard.js'
+import MouseEvents from './events/mouse.js'
 
 export default {
+    mixins: [FocusEvents, KeyboardEvents, MouseEvents],
     props: {
+        id: {
+            type: String,
+            required: false,
+        },
+        accept: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        alt: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        autocomplete: {
+            type: String,
+            required: false,
+            // default: 'off',
+            validator(value) {
+                return ['on', 'off'].indexOf(value) > -1
+            }
+        },
+        autofocus: {
+            type: Boolean,
+            required: false,
+            default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        checked: {
+            type: Boolean,
+            required: false,
+            default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        dirname: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
         disabled: {
             type: Boolean,
             required: false,
-            default: false
+            default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        form: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        formaction: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        formenctype: {
+            type: String,
+            required: false,
+            // default: false,
+            validator(value) {
+                return [
+                    'application/x-www-form-urlencoded',
+                    'multipart/form-data',
+                    'text/plain',
+                ].indexOf(value) > -1
+            }
+        },
+        formmethod: {
+            type: String,
+            required: false,
+            // default: false,
+            validator(value) {
+                return [
+                    'get',
+                    'post',
+                ].indexOf(value) > -1
+            }
+        },
+        formnovalidate: {
+            type: Boolean,
+            required: false,
+            default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        formtarget: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        list: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        max: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        maxlength: {
+            type: Number,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        min: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        multiple: {
+            type: Boolean,
+            required: false,
+            default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        name: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        pattern: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
         },
         placeholder: {
-            type: String
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        readonly: {
+            type: Boolean,
+            required: false,
+            default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        required: {
+            type: Boolean,
+            required: false,
+            default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        src: {
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
+        step: {
+            type: Number,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
         },
         type: {
             type: String,
-            default: 'text'
+            required: false,
+            default: 'text',
+            validator(value) {
+                return [
+                    'button',
+                    'checkbox',
+                    'color',
+                    'date',
+                    'datetime-local',
+                    'email',
+                    'file',
+                    'hidden',
+                    'image',
+                    'month',
+                    'number',
+                    'password',
+                    'radio',
+                    'range',
+                    'reset',
+                    'search',
+                    'submit',
+                    'tel',
+                    'text',
+                    'time',
+                    'url',
+                    'week',
+                ].indexOf(value) > -1
+            }
         },
         value: {
-            type: String
-        }
+            type: String,
+            required: false,
+            // default: false,
+            // validator(value) {
+            //     return true
+            // }
+        },
     },
     methods: {
-        updateValue(value) {
+        // ref="input" v-bind:value="value" v-on:input="emitInput($event.target.value)"
+        emitInput(value) {
             // If the value was not already normalized,
             // manually override it to conform
             if (value !== this.value) {
@@ -28,6 +267,6 @@ export default {
 
             // Emit the number value through the input event
             this.$emit('input', value)
-        }
+        },
     }
 }
