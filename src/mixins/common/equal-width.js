@@ -10,7 +10,11 @@ export default {
     },
     methods: {
         getEqualWidthClasses() {
-            return [Constants.equal, Constants.width];
+            if (this.equalWidth) {
+                return [Constants.equal, Constants.width];
+            }
+
+            return false;
         }
     }
 }
