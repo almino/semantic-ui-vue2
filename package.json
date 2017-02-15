@@ -1,0 +1,24 @@
+{
+  "name": "semantic-ui-vue2",
+  "version": "1.0.0",
+  "description": "Semantic UI Integration for Vue 2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/almino/semantic-ui-vue2.git"
+  },
+  "keywords": [
+    "Vue",
+    "Vue 2",
+    "Semantic UI"
+  ],
+  "author": "Almino Melo <almino.melo@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/almino/semantic-ui-vue2/issues"
+  },
+  "homepage": "https://github.com/almino/semantic-ui-vue2#readme"
+}

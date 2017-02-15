@@ -1,6 +1,7 @@
 <template lang="html">
-    <div v-bind:class="[{ 'required' : required }, { 'disabled' : disabled },
-        'field', { 'error' : error }]">
+    <div v-bind:class="[getWidthClasses(), { 'inline' : inline },
+        { 'required' : required }, { 'disabled' : disabled }, 'field',
+        { 'error' : error }]">
         <label v-bind:for="id">
             {{ label }}
             <slot name="label"></slot>
@@ -51,9 +52,10 @@
 <script>
 import Input from '../../mixins/common/input.js'
 import Error from '../../mixins/common/states/error.js'
+import Width from '../../mixins/common/width.js'
 
 export default {
-    mixins: [Input, Error],
+    mixins: [Input, Error, Width],
     props: {
         id: {
             type: String,
@@ -62,7 +64,12 @@ export default {
         },
         label: {
             type: String,
-        }
+        },
+        inline: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
     }
 }
 </script>

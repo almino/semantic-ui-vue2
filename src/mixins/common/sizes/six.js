@@ -5,9 +5,7 @@ const sizes = [
     Constants.huge,
     Constants.big,
     Constants.large,
-    Constants.medium,
     Constants.small,
-    Constants.tiny,
     Constants.mini,
 ];
 
@@ -18,7 +16,7 @@ export default {
             required: false,
             // default: false,
             validator(value) {
-                return value > 0 || value < 9 || sizes.indexOf(value) > -1;
+                return (value > 0 && value) < 7 || sizes.indexOf(value) > -1;
             }
         },
     },
