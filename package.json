@@ -11,9 +11,9 @@
     "url": "git+https://github.com/almino/semantic-ui-vue2.git"
   },
   "keywords": [
-    "Vue",
-    "Vue 2",
-    "Semantic UI"
+    "vue",
+    "vue2",
+    "semantic-ui"
   ],
   "author": "Almino Melo <almino.melo@gmail.com>",
   "license": "ISC",
