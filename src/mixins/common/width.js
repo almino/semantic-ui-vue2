@@ -39,6 +39,10 @@ export default {
             return widths[value - 1];
         },
         getWidthClasses() {
+            if (typeof this.width === 'undefined') {
+                return false;
+            }
+
             var classes = [Constants.wide];
 
             if (isNaN(this.width)) {
