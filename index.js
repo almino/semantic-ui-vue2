@@ -7,10 +7,15 @@ import Label from './src/elements/Label.vue'
 
 import Form from './src/collections/Form.vue'
 import Field from './src/collections/form/Field.vue'
+
+import Modal from './src/modules/Modal.vue'
+
 import Mixin from './src/mixins'
 import Collections from './src/mixins/collections.js'
 
 export {
+    Mixin,
+    Collections,
     Grid,
     Row,
     Column,
@@ -18,6 +23,5 @@ export {
     Label,
     Form,
     Field,
-    Mixin,
-    Collections,
+    Modal,
 }

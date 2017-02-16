@@ -1,4 +1,5 @@
 export default {
+    ui: 'ui',
     left: 'left',
     right: 'right',
     icon: 'icon',
@@ -29,4 +30,9 @@ export default {
     fifteen: 'fifteen',
     sixteen: 'sixteen',
     wide: 'wide',
+    dimmer: 'dimmer',
+    modal: 'modal',
+    transition: 'transition',
+    visible: 'visible',
+    active: 'active',
 }
