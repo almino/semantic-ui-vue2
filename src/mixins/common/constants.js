@@ -32,6 +32,7 @@ export default {
     wide: 'wide',
     dimmer: 'dimmer',
     modal: 'modal',
+    modals: 'modals',
     transition: 'transition',
     visible: 'visible',
     active: 'active',
