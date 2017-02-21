@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Width from '../../mixins/common/width.js'
+import Width from '../../mixins/commons/width.js'
 
 export default {
     mixins: [Width],

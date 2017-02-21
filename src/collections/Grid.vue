@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import EqualWidth from '../mixins/common/equal-width.js'
+import EqualWidth from '../mixins/commons/equal-width.js'
 
 export default {
     mixins: [EqualWidth],

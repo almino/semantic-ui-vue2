@@ -50,9 +50,9 @@
 </template>
 
 <script>
-import Input from '../../mixins/common/input.js'
-import Error from '../../mixins/common/states/error.js'
-import Width from '../../mixins/common/width.js'
+import Input from '../../mixins/commons/input.js'
+import Error from '../../mixins/commons/states/error.js'
+import Width from '../../mixins/commons/width.js'
 
 export default {
     mixins: [Input, Error, Width],
