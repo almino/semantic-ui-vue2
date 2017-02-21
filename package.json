@@ -1,6 +1,6 @@
 {
   "name": "semantic-ui-vue2",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "Semantic UI Integration for Vue 2",
   "main": "index.js",
   "scripts": {
