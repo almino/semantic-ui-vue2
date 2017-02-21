@@ -16,7 +16,7 @@ export default {
             required: false,
             // default: false,
             validator(value) {
-                return (value > 0 && value) < 7 || sizes.indexOf(value) > -1;
+                return (value > 0 && value) < (sizes.length + 1) || sizes.indexOf(value) > -1;
             }
         },
     },
