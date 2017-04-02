@@ -29,6 +29,38 @@ export default {
                 return (value > 0 && value < 17) || widths.indexOf(value) > -1;
             }
         },
+        mobile: {
+            type: [String, Number],
+            required: false,
+            // default: false,
+            validator(value) {
+                return (value > 0 && value < 17) || widths.indexOf(value) > -1;
+            }
+        },
+        tablet: {
+            type: [String, Number],
+            required: false,
+            // default: false,
+            validator(value) {
+                return (value > 0 && value < 17) || widths.indexOf(value) > -1;
+            }
+        },
+        computer: {
+            type: [String, Number],
+            required: false,
+            // default: false,
+            validator(value) {
+                return (value > 0 && value < 17) || widths.indexOf(value) > -1;
+            }
+        },
+        widescreen: {
+            type: [String, Number],
+            required: false,
+            // default: false,
+            validator(value) {
+                return (value > 0 && value < 17) || widths.indexOf(value) > -1;
+            }
+        },
     },
     methods: {
         getSemanticWidths(value) {
@@ -38,17 +70,61 @@ export default {
 
             return widths[value - 1];
         },
+        getWidthClassesFor(type, width) {
+
+            var classes = [];
+
+            classes.unshift(Constants.wide, type);
+
+            if (isNaN(width)) {
+                classes.unshift(width);
+            } else {
+                classes.unshift(this.getSemanticWidths(width));
+            }
+
+            return classes;
+        },
         getWidthClasses() {
-            if (typeof this.width === 'undefined') {
+            if (
+                typeof this.width === 'undefined' &&
+                typeof this.mobile === 'undefined' &&
+                typeof this.tablet === 'undefined' &&
+                typeof this.computer === 'undefined' &&
+                typeof this.widescreen === 'undefined'
+            ) {
                 return false;
             }
 
-            var classes = [Constants.wide];
+            var classes = [];
 
-            if (isNaN(this.width)) {
-                classes.unshift(this.width);
+            if (typeof this.mobile === 'undefined' &&
+                typeof this.tablet === 'undefined' &&
+                typeof this.computer === 'undefined' &&
+                typeof this.widescreen === 'undefined'
+            ) {
+                classes.unshift(Constants.wide);
+
+                if (isNaN(this.width)) {
+                    classes.unshift(this.width);
+                } else {
+                    classes.unshift(this.getSemanticWidths(this.width));
+                }
             } else {
-                classes.unshift(this.getSemanticWidths(this.width));
+                if (typeof this.widescreen !== 'undefined') {
+                    classes.unshift(...this.getWidthClassesFor(Constants.widescreen, this.widescreen));
+                }
+
+                if (typeof this.computer !== 'undefined') {
+                    classes.unshift(...this.getWidthClassesFor(Constants.computer, this.computer));
+                }
+
+                if (typeof this.tablet !== 'undefined') {
+                    classes.unshift(...this.getWidthClassesFor(Constants.tablet, this.tablet));
+                }
+
+                if (typeof this.mobile !== 'undefined') {
+                    classes.unshift(...this.getWidthClassesFor(Constants.mobile, this.mobile));
+                }
             }
 
             return classes;
