@@ -59,7 +59,6 @@ import Error from '../mixins/commons/states/error.js'
 import Icon from '../mixins/commons/icon.js'
 import Inverted from '../mixins/commons/inverted.js'
 import Size from '../mixins/commons/sizes/six.js'
-import Constants from '../mixins/commons/constants.js'
 
 export default {
     mixins: [Input, Focus, Loading, Error, Icon, Inverted, Size],
@@ -92,42 +91,44 @@ export default {
     created() {
         if (this.loading && !this.icon) {
             this.dIcon.value = 'notched circle loading';
-            this.dIcon.position = Constants.left;
+            this.dIcon.position = 'left';
         }
 
         if (this.leftIcon) {
             this.dIcon.value = this.leftIcon;
-            this.dIcon.position = Constants.left;
+            this.dIcon.position = 'left';
         }
     },
     methods: {
         getIconClasses() {
             if (this.dIcon.value) {
-                return (this.dIcon.position == Constants.right ? Constants.icon : this.dIcon.position + ' ' + Constants.icon)
+                return (this.dIcon.position == 'right' ? 'icon' : this.dIcon.position + ' icon')
             }
 
             return false
         },
         getSlotsClasses() {
-            var classes = []
+            var classes = [],
+                labeled = 'labeled',
+                action = 'action'
 
             if (this.$slots.hasOwnProperty('right-label')) {
-                classes.push(Constants.right)
+                classes.push('right')
             }
 
             if (this.$slots.hasOwnProperty('left-label') || this.$slots.hasOwnProperty('right-label')) {
-                classes.push(Constants.labeled)
+                classes.push(labeled)
             }
 
             if (this.$slots.hasOwnProperty('left-action')) {
-                classes.push(Constants.left)
+                classes.push('left')
             }
 
             if (this.$slots.hasOwnProperty('left-action') || this.$slots.hasOwnProperty('right-action')) {
-                classes.push(Constants.action)
+                classes.push(action)
             }
 
-            return classes
+            return classes;
         }
     }
 }

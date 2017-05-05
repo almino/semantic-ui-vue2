@@ -1,5 +1,4 @@
 export default {
-    action: 'action',
     active: 'active',
     animating: 'animating',
     basic: 'basic',
@@ -24,8 +23,6 @@ export default {
     icon: 'icon',
     in: 'in',
     inverted: 'inverted',
-    label: 'label',
-    labeled: 'labeled',
     large: 'large',
     left: 'left',
     massive: 'massive',
