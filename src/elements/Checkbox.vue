@@ -1,7 +1,7 @@
 <template lang="html">
-    <div v-bind:class="['ui', getSlotsClasses(), getIconClasses(), getSizeClasses(),
+    <div v-bind:class="['ui', getSizeClasses(),
         { 'fluid' : fluid }, { 'inverted' : inverted },
-        { 'transparent' : transparent }, { 'disabled' : disabled }, 'input',
+        { 'transparent' : transparent }, { 'disabled' : disabled }, 'checkbox',
         { 'focus' : focus }, { 'loading' : loading }, { 'error' : error }]">
         <slot name="left-label"></slot>
         <slot name="left-action"></slot>
@@ -32,7 +32,7 @@
             v-bind:required="required"
             v-bind:src="src"
             v-bind:step="step"
-            v-bind:type="type"
+            type="checkbox"
             v-on:keydown="emitKeyDown" v-on:keypress="emitKeyPress"
             v-on:keyup="emitKeyUp" v-on:mouseenter="emitMouseEnter"
             v-on:mouseover="emitMouseOver" v-on:mousemove="emitMouseMove"
@@ -92,42 +92,44 @@ export default {
     created() {
         if (this.loading && !this.icon) {
             this.dIcon.value = 'notched circle loading';
-            this.dIcon.position = Constants.left;
+            this.dIcon.position = 'left';
         }
 
         if (this.leftIcon) {
             this.dIcon.value = this.leftIcon;
-            this.dIcon.position = Constants.left;
+            this.dIcon.position = 'left';
         }
     },
     methods: {
         getIconClasses() {
             if (this.dIcon.value) {
-                return (this.dIcon.position == Constants.right ? Constants.icon : this.dIcon.position + ' ' + Constants.icon)
+                return (this.dIcon.position == 'right' ? 'icon' : this.dIcon.position + ' icon')
             }
 
             return false
         },
         getSlotsClasses() {
-            var classes = []
+            var classes = [],
+                labeled = 'labeled',
+                action = 'action'
 
             if (this.$slots.hasOwnProperty('right-label')) {
-                classes.push(Constants.right)
+                classes.push('right')
             }
 
             if (this.$slots.hasOwnProperty('left-label') || this.$slots.hasOwnProperty('right-label')) {
-                classes.push(Constants.labeled)
+                classes.push(labeled)
             }
 
             if (this.$slots.hasOwnProperty('left-action')) {
-                classes.push(Constants.left)
+                classes.push('left')
             }
 
             if (this.$slots.hasOwnProperty('left-action') || this.$slots.hasOwnProperty('right-action')) {
-                classes.push(Constants.action)
+                classes.push(action)
             }
 
-            return classes
+            return classes;
         }
     }
 }
