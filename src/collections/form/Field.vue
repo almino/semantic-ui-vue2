@@ -34,37 +34,49 @@
             v-bind:src="src"
             v-bind:step="step"
             v-bind:type="type"
-            v-on:keydown="emitKeyDown" v-on:keypress="emitKeyPress"
-            v-on:keyup="emitKeyUp" v-on:mouseenter="emitMouseEnter"
-            v-on:mouseover="emitMouseOver" v-on:mousemove="emitMouseMove"
-            v-on:mousedown="emitMouseDown" v-on:mouseup="emitMouseUp"
-            v-on:click="emitClick" v-on:dblclick="emitDoubleClick"
-            v-on:contextmenu="emitContextMenu" v-on:wheel="emitWheel"
-            v-on:mouseleave="emitMouseLeave" v-on:mouseout="emitMouseOut"
-            v-on:select="emitSelect"
+            v-bind:value="value"
+            v-on:keydown="emitKeyDown"
+            v-on:keypress="emitKeyPress"
+            v-on:keyup="emitKeyUp"
+            v-on:mouseenter="emitMouseEnter"
+            v-on:mouseover="emitMouseOver"
+            v-on:mousemove="emitMouseMove"
+            v-on:mousedown="emitMouseDown"
+            v-on:mouseup="emitMouseUp"
+            v-on:click="emitClick"
+            v-on:dblclick="emitDoubleClick"
+            v-on:wheel="emitWheel"
+            v-on:mouseleave="emitMouseLeave"
+            v-on:mouseout="emitMouseOut"
             v-on:pointerlockchange="emitPointerLockChange"
             v-on:pointerlockerror="emitPointerLockError"
-            v-on:focus="emitFocus" v-on:blur="emitBlur"
-            ref="input" v-bind:value="value" v-on:input="emitInput($event.target.value)" />
+            v-on:blur="emitBlur"
+            v-on:change="emitChange($event.target.value)"
+            v-on:contextmenu="emitContextMenu"
+            v-on:focus="emitFocus"
+            v-on:input="emitInput($event.target.value)"
+            v-on:invalid="emitInvalid"
+            v-on:reset="emitReset"
+            v-on:search="emitSearch"
+            v-on:select="emitSelect"
+            v-on:submit="emitSubmit"
+            ref="input" />
     </div>
 </template>
 
 <script>
 import Input from '../../mixins/commons/input.js'
+import RandomProp from '../../mixins/commons/props/random.js'
 import Error from '../../mixins/commons/states/error.js'
 import Width from '../../mixins/commons/width.js'
 
 export default {
     mixins: [Input, Error, Width],
     props: {
-        id: {
-            type: String,
-            required: false,
-            default: Math.random().toString(36).substring(7),
-        },
         label: {
             type: String,
         },
+        id: RandomProp,
         inline: {
             type: Boolean,
             required: false,
