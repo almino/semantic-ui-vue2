@@ -1,9 +1,11 @@
 import FocusEvents from './events/focus.js'
 import KeyboardEvents from './events/keyboard.js'
 import MouseEvents from './events/mouse.js'
+import FormEvents from './events/form.js'
+import Type from './props/type.js'
 
 export default {
-    mixins: [FocusEvents, KeyboardEvents, MouseEvents],
+    mixins: [FocusEvents, KeyboardEvents, MouseEvents, FormEvents],
     props: {
         id: {
             type: String,
@@ -216,39 +218,9 @@ export default {
             //     return true
             // }
         },
-        type: {
-            type: String,
-            required: false,
-            default: 'text',
-            validator(value) {
-                return [
-                    'button',
-                    'checkbox',
-                    'color',
-                    'date',
-                    'datetime-local',
-                    'email',
-                    'file',
-                    'hidden',
-                    'image',
-                    'month',
-                    'number',
-                    'password',
-                    'radio',
-                    'range',
-                    'reset',
-                    'search',
-                    'submit',
-                    'tel',
-                    'text',
-                    'time',
-                    'url',
-                    'week',
-                ].indexOf(value) > -1
-            }
-        },
+        type: Type,
         value: {
-            type: String,
+            // type: String,
             required: false,
             // default: false,
             // validator(value) {
