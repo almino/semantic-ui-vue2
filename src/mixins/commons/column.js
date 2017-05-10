@@ -17,7 +17,7 @@ const columns = [
     Constants.fourteen,
     Constants.fifteen,
     Constants.sixteen,
-]
+];
 
 export default {
     props: {

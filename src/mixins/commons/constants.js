@@ -1,5 +1,6 @@
 export default {
     active: 'active',
+    aligned: 'aligned',
     animating: 'animating',
     basic: 'basic',
     big: 'big',
@@ -18,6 +19,7 @@ export default {
     fifteen: 'fifteen',
     five: 'five',
     flip: 'flip',
+    floated: 'floated',
     four: 'four',
     fourteen: 'fourteen',
     fullscreen: 'fullscreen',
@@ -62,4 +64,9 @@ export default {
     wide: 'wide',
     widescreen: 'widescreen',
     width: 'width',
+    bottom: 'bottom',
+    center: 'center',
+    centered: 'centered',
+    middle: 'middle',
+    top: 'top',
 }
