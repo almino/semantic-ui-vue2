@@ -106,12 +106,12 @@ export default {
     created() {
         if (this.loading && !this.icon) {
             this.dIcon.value = 'notched circle loading';
-            this.dIcon.position = 'left';
+            this.dIcon.position = Constants.left;
         }
 
         if (this.leftIcon) {
             this.dIcon.value = this.leftIcon;
-            this.dIcon.position = 'left';
+            this.dIcon.position = Constants.left;
         }
     },
     methods: {
@@ -124,19 +124,18 @@ export default {
         },
         getSlotsClasses() {
             var classes = [],
-                labeled = 'labeled',
                 action = 'action'
 
             if (this.$slots.hasOwnProperty('right-label')) {
-                classes.push('right')
+                classes.push(Constants.right)
             }
 
             if (this.$slots.hasOwnProperty('left-label') || this.$slots.hasOwnProperty('right-label')) {
-                classes.push(labeled)
+                classes.push(Constants.labeled)
             }
 
             if (this.$slots.hasOwnProperty('left-action')) {
-                classes.push('left')
+                classes.push(Constants.left)
             }
 
             if (this.$slots.hasOwnProperty('left-action') || this.$slots.hasOwnProperty('right-action')) {

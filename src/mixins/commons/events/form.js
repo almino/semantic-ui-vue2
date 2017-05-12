@@ -5,8 +5,9 @@ export default {
             this.$emit('change', value)
             this.$emit('input', value)
         },
-        emitContextmenu() {
-            this.$emit('contextmenu')
+        emitInput(value) {
+            this.$emit('change', value)
+            this.$emit('input', value)
         },
         emitInvalid() {
             this.$emit('invalid')

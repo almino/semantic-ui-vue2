@@ -1,3 +1,4 @@
+import Random from './props/random.js'
 import FocusEvents from './events/focus.js'
 import KeyboardEvents from './events/keyboard.js'
 import MouseEvents from './events/mouse.js'
@@ -7,10 +8,7 @@ import Type from './props/type.js'
 export default {
     mixins: [FocusEvents, KeyboardEvents, MouseEvents, FormEvents],
     props: {
-        id: {
-            type: String,
-            required: false,
-        },
+        id: Random,
         accept: {
             type: String,
             required: false,
