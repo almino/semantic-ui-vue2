@@ -221,9 +221,6 @@
                 return this.$vnode.data.attrs.value && Array.isArray(this.value)
             },
         },
-        created() {
-            console.log(this.value)
-        },
     }
 </script>
 
