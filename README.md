@@ -27,6 +27,7 @@ Import individual components.
 - `Grid` – component
 - `Row` – component
 - `Column` – component
+- `Checkbox` – component
 - `Input` – component
 - `Label` – component
 - `Form` – component
