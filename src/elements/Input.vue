@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import Constants from '../mixins/commons/constants.js'
 import Input from '../mixins/commons/input.js'
 import Focus from '../mixins/commons/states/focus.js'
 import Loading from '../mixins/commons/states/loading.js'
@@ -117,7 +118,7 @@ export default {
     methods: {
         getIconClasses() {
             if (this.dIcon.value) {
-                return (this.dIcon.position == 'right' ? 'icon' : this.dIcon.position + ' icon')
+                return (this.dIcon.position == Constants.right ? Constants.icon : this.dIcon.position + ' ' + Constants.icon)
             }
 
             return false
