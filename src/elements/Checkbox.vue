@@ -59,7 +59,7 @@
             v-on:submit="emitSubmit"
             ref="input" />
             <label v-bind:for="id">
-                <slot>{{ label }}</slot>                
+                <slot>{{ label }}</slot>
                 <span v-show="inputValue">
                     &emsp;
                     <span class="ui small blue label">{{ inputValue }}</span>
@@ -162,7 +162,7 @@
                     return this.value == this.$vnode.data.attrs.value;
                 }
 
-                if (this.value !== true && this.value !== false) {
+                if (typeof this.value != 'undefined' && this.value !== true && this.value !== false) {
                     return this.value == this.trueVal
                 }
 
