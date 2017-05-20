@@ -11,8 +11,13 @@ export default {
     props: {
         attached: {
             type: [Boolean, String],
+            required: false,
+            default: false,
             validator(value) {
-                return value === true || enums.indexOf(value) > -1;
+                if (typeof value == 'boolean') {
+                    return true;
+                }
+                return enums.indexOf(value) > -1;
             },
         }
     },

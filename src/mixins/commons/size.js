@@ -17,10 +17,5 @@ export default {
                 return enums.indexOf(value) > -1;
             },
         }
-    },
-    methods: {
-        getFixedClasses() {
-            return this.size ? this.size : false;
-        },
-    },
+    }
 }
