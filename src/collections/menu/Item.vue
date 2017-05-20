@@ -1,5 +1,5 @@
 <template lang="html">
-    <component :is="getComponentType()" v-bind:class="['item', {active}, {link}, {fitted}, {borderless}, getColorClass(), {right}]">
+    <component :is="getComponentType()" v-bind:class="['item', {active}, {link}, {fitted}, {borderless}, getColorClass(), {right}, {header}]">
         <slot></slot>
     </component>
 </template>
@@ -15,5 +15,12 @@
 
     export default {
         mixins: [Active, As, Link, Fitted, Borderless, Color, Right],
+        props: {
+            header: {
+                type: Boolean,
+                required: false,
+                default: false,
+            }
+        }
     }
 </script>
