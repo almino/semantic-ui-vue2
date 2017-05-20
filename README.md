@@ -51,6 +51,7 @@ Mixins to import related components at once
 
 - `Grid` – `ui-grid`, `ui-row`, `ui-column`
 - `Form` – `ui-form`, `ui-field`
+- `Menu` – `ui-menu`, `ui-menu-item`, `ui-menu-header`, `ui-submenu`
 
 ```javascript
 import {Collections} from 'semantic-ui-vue2'
