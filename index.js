@@ -9,6 +9,11 @@ import Label from './src/elements/Label.vue'
 import Form from './src/collections/Form.vue'
 import Field from './src/collections/form/Field.vue'
 
+import Menu from './src/collections/Menu.vue'
+import MenuItem from './src/collections/menu/Item.vue'
+import MenuHeader from './src/collections/menu/Header.vue'
+import Submenu from './src/collections/menu/Submenu.vue'
+
 import Modal from './src/modules/Modal.vue'
 
 import Mixin from './src/mixins'
