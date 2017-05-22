@@ -30,6 +30,7 @@ export default {
     icon: 'icon',
     in: 'in',
     inverted: 'inverted',
+    labeled: 'labeled',
     large: 'large',
     left: 'left',
     massive: 'massive',

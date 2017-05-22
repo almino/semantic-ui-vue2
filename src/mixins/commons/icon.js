@@ -3,7 +3,7 @@ import Constants from './constants.js';
 export default {
     props: {
         icon: {
-            type: String,
+            type: [String, Boolean],
             required: false,
             // default: false
         },

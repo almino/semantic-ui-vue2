@@ -1,3 +1,8 @@
+import Button from './src/elements/Button.vue'
+import ButtonGroup from './src/elements/button/Group.vue'
+import ButtonLabel from './src/elements/button/Label.vue'
+import ButtonOr from './src/elements/button/Or.vue'
+
 import Grid from './src/collections/Grid.vue'
 import Row from './src/collections/grid/Row.vue'
 import Column from './src/collections/grid/Column.vue'
@@ -22,6 +27,10 @@ import Collections from './src/mixins/collections.js'
 export {
     Mixin,
     Collections,
+    Button,
+    ButtonGroup,
+    ButtonLabel,
+    ButtonOr,
     Grid,
     Row,
     Column,
