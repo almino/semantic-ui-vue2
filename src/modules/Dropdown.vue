@@ -12,7 +12,7 @@
         v-bind:tabindex="search ? '' : 0"
         v-click-outside="hide">
         <input type="hidden" v-bind:name="name" v-if="selection">
-        <i class="dropdown icon" v-on:click="toggle"></i>
+        <i class="dropdown icon" v-on:click="!search && isVisible ? hide() : show()"></i>
         <input type="search" class="search" autocomplete="off" tabindex="0"
             ref="search"
             v-model="term"
@@ -209,12 +209,16 @@ Ignoring item: `, item)
                 if (!this.animating) {
                     this.isVisible ? this.hide() : this.show()
                 }
+
+                console.log('toggle')
             },
             show() {
                 this.isVisible = true
                 if (this.search) {
                     this.$refs.search.focus()
                 }
+
+                console.log('show')
             },
             hide() {
                 if (!this.fullTextSearch && this.filtered && this.$items.length > 0) {
@@ -222,6 +226,8 @@ Ignoring item: `, item)
                 }
                 
                 this.isVisible = false
+
+                console.log('hide')
             },
             clear() {
                 this.$emit('input', null)
@@ -251,12 +257,14 @@ Ignoring item: `, item)
             isObject(instance) {
                 return !Array.isArray(instance) && instance === Object(instance) 
             },
+            tmp() {
+                console.log(this.$data)
+            }
         },
         created() {
             if (typeof this.value == 'undefined' || this.value === null) {
                 this.selected = {}
             }
-            console.log(this.selected.value)
         }
         /*mounted() {
             console.log(this.month)
