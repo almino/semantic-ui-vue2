@@ -1,6 +1,6 @@
-[submodule "src/mixins/commons/click-outside"]
-	path = src/mixins/commons/click-outside
-	url = https://gist.github.com/435abf4b203571cba4c8ca1884997f9c.git
 [submodule "src/mixins/commons/input"]
 	path = src/mixins/commons/input
 	url = https://gist.github.com/ebc1d0a4c2b61fb8e5af27ee6fd43465.git
+[submodule "src/mixins/commons/click-outside"]
+	path = src/mixins/commons/click-outside
+	url = https://gist.github.com/435abf4b203571cba4c8ca1884997f9c.git
