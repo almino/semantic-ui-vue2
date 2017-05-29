@@ -141,10 +141,10 @@
                 return this.type != Constants.checkbox ? this.type : false
             },
             inputValue() {
-                var attr = this.$vnode.data.attrs.value
+                var attrs = this.$vnode.data.attrs
 
-                if (attr) {
-                    return attr
+                if (typeof attrs != 'undefined' && attrs.value) {
+                    return attrs.value
                 }
 
                 if (this.inputType != Constants.radio && this.trueVal) {
@@ -169,9 +169,17 @@
                 return this.value
             },
             trueVal() {
+                if (typeof this.$vnode.data.attrs == 'undefined') {
+                    return null;
+                }
+
                 return this.$vnode.data.attrs['true-value'];
             },
             falseVal() {
+                if (typeof this.$vnode.data.attrs == 'undefined') {
+                    return null;
+                }
+
                 return this.$vnode.data.attrs['false-value'];
             },
         },
@@ -218,11 +226,10 @@
                 this.$emit('change', this.isChecked);
             },
             usesVueModel() {
-                return this.$vnode.data.attrs.value && Array.isArray(this.value)
+                return typeof this.$vnode.data.attrs != 'undefined'
+                    && this.$vnode.data.attrs.value
+                    && Array.isArray(this.value)
             },
-        },
-        created() {
-            console.log(this.value)
         },
     }
 </script>
