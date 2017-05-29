@@ -1,2 +1,6 @@
 docs/
 README.md
+*.new
+*.bkp
+*.old.*
+*.old
