@@ -3,8 +3,10 @@ import Form from './form.js'
 
 import Input from '../elements/Input.vue'
 import Label from '../elements/Label.vue'
+import Checkbox from '../elements/Checkbox.vue'
 
 import Modal from '../modules/Modal.vue'
+import Dropdown from '../modules/Dropdown.vue'
 
 export default {
     mixins: [
@@ -14,6 +16,8 @@ export default {
     components: {
         'ui-input': Input,
         'ui-label': Label,
+        'ui-checkbox': Checkbox,
         'ui-modal': Modal,
+        'ui-dropdown': Dropdown,
     },
 }
