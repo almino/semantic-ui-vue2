@@ -67,7 +67,8 @@
 </template>
 
 <script>
-import Input from '../mixins/commons/input.js'
+import Constants from '../mixins/commons/constants.js'
+import Input from '../mixins/commons/input'
 import Focus from '../mixins/commons/states/focus.js'
 import Loading from '../mixins/commons/states/loading.js'
 import Error from '../mixins/commons/states/error.js'
