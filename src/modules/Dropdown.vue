@@ -8,8 +8,8 @@
             {selection},
             'dropdown'
         ]" v-on:click.self="toggle"
-        v-on:keyup.down="selectPrevious"
-        v-on:keydown.down="selectNext"
+        v-on:keydown.up="search ? selectPrevious : false"
+        v-on:keydown.down="search ? selectNext : false"
         v-bind:tabindex="search ? '' : 0"
         v-click-outside="hide">
         <input type="hidden" v-bind:name="name" v-if="selection">
@@ -19,7 +19,7 @@
             v-model="term"
             v-on:focus="show"
             v-on:blur="hide"
-            v-on:keyup.down="selectPrevious"
+            v-on:keydown.up="selectPrevious"
             v-on:keydown.down="selectNext"
             v-if="search">
         <div v-bind:class="[
@@ -30,8 +30,8 @@
             <transition
                 v-on:before-enter="beforeEnter"
                 v-on:after-enter="afterEnter"
-                enter-active-class="animating slide down in"
-                leave-active-class="animating slide down out"
+                v-bind:enter-active-class="enterActiveClass"
+                v-bind:leave-active-class="leaveActiveClass"
                 v-on:before-leave="beforeLeave"
                 v-on:after-leave="afterLeave">
                 <div
@@ -60,8 +60,9 @@
 </template>
 
 <script>
-    import ClickOutside from '../mixins/commons/click-outside'
-    import Input from '../mixins/commons/input'
+    import Constants from '../mixins/commons/constants.js'
+    import ClickOutside from '../mixins/commons/click-outside/'
+    import Input from '../mixins/commons/input/'
     import Arrai from '../mixins/commons/arrai.js'
 
     export default {
@@ -86,6 +87,10 @@
             fullTextSearch: {
                 type: Boolean,
                 default: false,
+            },
+            transition: {
+                type: String,
+                default: 'slide down'
             },
             messages: {
                 type: Object,
@@ -131,18 +136,18 @@
                     /* Checks if it is a object */
                     if (this.isObject(item)) {
                             /* Checks for a value property */
-                            if (typeof item.value == 'undefined' || item.value.length < 1) {
+                            if (typeof item.value == 'undefined' || item.value.length < 1 && this.selection) {
                                 /* Show warning on JavaScript console */
                                 console.warn(`Object must have a value property. Schema:
 {
     // name displayed in dropdown
-    "name"  : "Beyoncé Knowles",
+    "name"      : "Beyoncé Knowles",
     // selected value
-    "value" : "${Math.floor(Math.random() * 10)}" // User ID,
+    "value"     : "${Math.floor(Math.random() * 10)}" // User ID,
     // name displayed after selection (optional)
-    "text"  : "Beyoncé"
+    "text"      : "Beyoncé"
     // array of strings to test using user's input as a regexp (optional)
-    "disabled"  : ['Beyonce Knowles'] // no diacritcs
+    "search"    : ['Beyonce Knowles'] // no diacritcs version
     // whether field should be displayed as disabled (optional)
     "disabled"  : false
 }
@@ -151,15 +156,6 @@ Ignoring item: `, item)
                                 /* Skip this item */
                                 continue
                             }
-
-                            /* Put value in item name if it is not defined */
-                            // item.name = ((typeof item.name == 'undefined') || (item.name.length < 1)) ? item.value : item.name
-                            /* Put name in item text if it is not defined */
-                            // item.text = (typeof item.text == 'undefined' || item.text.length < 1) ? item.name : item.text
-                            /* Disabled's default value is false */
-                            // item.disabled = (typeof item.disabled == 'undefined' || typeof item.disabled != 'boolean') ? false : item.disabled
-                            /* Put all proprerties in item search if it is not defined */
-                            // item.search = (typeof item.search == 'undefined' || item.search.length < 1) ? [item.name, item.text, item.value] : item.search
 
                             sanitized = item
                     } else {
@@ -207,11 +203,25 @@ Ignoring item: `, item)
                 }
 
                 if (items.length < 1) {
-                    this.$emit('noresult');
+                    this.$emit('noresult', this.term);
                 }
 
                 return items
-            }
+            },
+            enterActiveClass() {
+                return this.arrayFlatten([
+                                            Constants.animating,
+                                            this.transition,
+                                            Constants.in,
+                                        ]).join(' ');
+            },
+            leaveActiveClass() {
+                return this.arrayFlatten([
+                                            Constants.animating,
+                                            this.transition,
+                                            Constants.out,
+                                        ]).join(' ');
+            },
         },
         watch: {
             isVisible(newVal) {
@@ -221,7 +231,6 @@ Ignoring item: `, item)
                 if (newVal != oldVal && typeof newVal.value != 'undefined') {
                     this.$emit('input', newVal.value)
                     this.$emit('change')
-                    this.term = ''
                 }
             },
         },
@@ -238,8 +247,13 @@ Ignoring item: `, item)
                 }
             },
             hide() {
-                if (!this.fullTextSearch && this.filtered && this.$items.length > 0) {
-                    this.selected = this.$items[0];
+                if (
+                    !this.fullTextSearch
+                    && this.filtered
+                    && this.$items.length > 0
+                    && !this.isSelected()
+                ) {
+                    this.selected = this.$items[0]
                 }
 
                 this.isVisible = false
@@ -250,24 +264,11 @@ Ignoring item: `, item)
             restoreDefaults() {
             },
             setSelected(value) {
-                this.selected = value
                 if (!value.disabled) {
+                    this.selected = value
+                    this.term = ''
                     this.hide()
                 }
-            },
-            selectPrevious() {
-                console.log('prev');
-                var pos = this.$items.indexOf(this.selected)
-
-                if (pos > 1)
-                    this.setSelected(this.$items[--pos]);
-            },
-            selectNext() {
-                console.log('next');
-                var pos = this.$items.indexOf(this.selected)
-
-                if (pos > this.$items.length)
-                    this.setSelected(this.$items[++pos]);
             },
             getText() {
                 return this.selected.text || this.selected.value
@@ -278,17 +279,47 @@ Ignoring item: `, item)
             beforeEnter() {
                 this.visible = true
                 this.animating = true
+                this.$emit('show')
             },
             afterEnter() {
                 this.visible = true
                 this.animating = false
+                this.$emit('shown')
             },
             beforeLeave() {
                 this.animating = true
+                this.$emit('hide')
             },
             afterLeave() {
                 this.animating = false
                 this.visible = false
+
+                if (this.isSelected() && this.term.length > 0) {
+                    this.term = ''
+                }
+
+                this.$emit('hidden')
+            },
+            selectPrevious() {
+                var pos = this.$items.indexOf(this.selected)
+
+                if (pos > 0) {
+                    this.selected = this.$items[--pos]
+                }
+            },
+            selectNext() {
+                let pos = this.$items.indexOf(this.selected)
+
+                if (++pos < this.$items.length) {
+                    this.selected = this.$items[pos]
+                }
+            },
+            isSelected() {
+                return this.isObject(this.selected)
+                        && !(
+                                Object.keys(this.selected).length === 0
+                                && this.selected.constructor === Object
+                            )
             },
             isObject(instance) {
                 return !Array.isArray(instance) && instance === Object(instance) 
