@@ -59,11 +59,7 @@
             v-on:submit="emitSubmit"
             ref="input" />
             <label v-bind:for="id">
-                <slot>{{ label }}</slot>                
-                <span v-show="inputValue">
-                    &emsp;
-                    <span class="ui small blue label">{{ inputValue }}</span>
-                </span>
+                <slot>{{ label }}</slot>
             </label>
     </div>
 </template>
