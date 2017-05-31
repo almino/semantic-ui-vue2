@@ -124,14 +124,15 @@ export default {
             return false
         },
         getSlotsClasses() {
-            var classes = [],
-                action = 'action'
+            var classes = []
 
             if (this.$slots.hasOwnProperty('right-label')) {
                 classes.push(Constants.right)
             }
 
-            if (this.$slots.hasOwnProperty('left-label') || this.$slots.hasOwnProperty('right-label')) {
+            if (
+                    this.$slots.hasOwnProperty('left-label') || this.$slots.hasOwnProperty('right-label')
+                ) {
                 classes.push(Constants.labeled)
             }
 
@@ -140,7 +141,7 @@ export default {
             }
 
             if (this.$slots.hasOwnProperty('left-action') || this.$slots.hasOwnProperty('right-action')) {
-                classes.push(action)
+                classes.push(Constants.action)
             }
 
             return classes;
