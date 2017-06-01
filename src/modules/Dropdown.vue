@@ -8,8 +8,8 @@
             {selection},
             'dropdown'
         ]" v-on:click.self="toggle"
-        v-on:keydown.up="search ? selectPrevious : false"
-        v-on:keydown.down="search ? selectNext : false"
+        v-on:keydown.up="search ? false : selectPrevious()"
+        v-on:keydown.down="search ? false : selectNext()"
         v-bind:tabindex="search ? '' : 0"
         v-click-outside="hide">
         <input type="hidden" v-bind:name="name" v-if="selection">
@@ -26,7 +26,7 @@
             { 'default' : typeof selected.value == 'undefined' },
             'text',
             { filtered },
-        ]">{{ selected.text || selected.value || placeholder }}</div>
+        ]">{{ selected.text || selected.value || placeholder || text }}</div>
             <transition
                 v-on:before-enter="beforeEnter"
                 v-on:after-enter="afterEnter"
@@ -41,6 +41,7 @@
                     <slot>
                         <template v-show="$items.length > 0">
                             <div
+                                ref="items"
                                 v-bind:class="[
                                     { 'disabled' : item.disabled },
                                     { 'active selected' : selected == item && !disabled },
@@ -68,6 +69,9 @@
     export default {
         mixins: [ClickOutside, Input, Arrai],
         props: {
+            text: {
+                type: String,
+            },
             items: {
                 type: Array,
                 default: () => [],
@@ -305,6 +309,8 @@ Ignoring item: `, item)
 
                 if (pos > 0) {
                     this.selected = this.$items[--pos]
+                    // this.$refs.items[pos].scrollIntoView(false)
+                    this.scrollIntoView(pos)
                 }
             },
             selectNext() {
@@ -312,6 +318,8 @@ Ignoring item: `, item)
 
                 if (++pos < this.$items.length) {
                     this.selected = this.$items[pos]
+                    // this.$refs.items[pos].scrollIntoView(false)
+                    this.scrollIntoView(pos)
                 }
             },
             isSelected() {
@@ -322,7 +330,20 @@ Ignoring item: `, item)
                             )
             },
             isObject(instance) {
-                return !Array.isArray(instance) && instance === Object(instance) 
+                return !Array.isArray(instance) && instance === Object(instance)
+            },
+            scrollIntoView(pos) {
+                var el = this.$refs.items[pos]
+                var items = Math.floor(el.offsetParent.offsetHeight / el.offsetHeight)
+                var scrollFixer = pos - items;
+
+                if ((el.clientHeight * pos) - (items * el.clientHeight) >= el.offsetParent.scrollTop - scrollFixer) {
+                    el.scrollIntoView(false)
+                }
+
+                if (el.offsetTop < el.offsetParent.scrollTop) {
+                    el.scrollIntoView()
+                }
             },
         },
         created() {
