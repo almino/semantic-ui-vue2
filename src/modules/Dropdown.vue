@@ -6,6 +6,7 @@
             {active},
             {search},
             {selection},
+            { 'upward' : $upward},
             'dropdown'
         ]" v-on:click.self="toggle"
         v-on:keydown.up="search ? false : selectPrevious()"
@@ -35,6 +36,7 @@
                 v-on:before-leave="beforeLeave"
                 v-on:after-leave="afterLeave">
                 <div
+                    ref="menu"
                     v-bind:class="[{visible}, 'transition', 'menu']"
                     tabindex="-1"
                     v-show="isVisible">
@@ -94,7 +96,11 @@
             },
             transition: {
                 type: String,
-                default: 'slide down'
+                default: [Constants.slide, Constants.down].join(' ')
+            },
+            upward: {
+                type: Boolean,
+                default: false,
             },
             messages: {
                 type: Object,
@@ -226,6 +232,9 @@ Ignoring item: `, item)
                                             Constants.out,
                                         ]).join(' ');
             },
+            $upward() {
+                return this.upward
+            }
         },
         watch: {
             isVisible(newVal) {
@@ -248,6 +257,29 @@ Ignoring item: `, item)
                 this.isVisible = true
                 if (this.search) {
                     this.$refs.search.focus()
+                }
+
+                if (!this.upward) {
+                    // get the window height https://gist.github.com/joshcarr/2f861bd37c3d0df40b30
+                    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight
+
+                    var top = this.$el.getBoundingClientRect().top
+
+                    // menu element
+                    var menu = this.$refs.menu
+
+                    // put the menu element into the DOM
+                    menu.style.visibility = 'hidden'
+                    menu.style.display = 'block'
+
+                    console.log(menu.offsetHeight + top)
+                    console.log(windowHeight)
+
+                    if (menu.offsetHeight + top > windowHeight) {
+                        this.$upward = true
+                    }
+                    
+                    menu.removeAttribute('style')
                 }
             },
             hide() {
@@ -286,8 +318,13 @@ Ignoring item: `, item)
                 this.$emit('show')
             },
             afterEnter() {
+                if (this.isSelected()) {
+                    this.scrollIntoView(this.$items.indexOf(this.selected))
+                }
+
                 this.visible = true
                 this.animating = false
+
                 this.$emit('shown')
             },
             beforeLeave() {
