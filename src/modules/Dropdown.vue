@@ -6,7 +6,7 @@
             {active},
             {search},
             {selection},
-            { 'upward' : $upward},
+            { 'upward' : isUpward },
             'dropdown'
         ]" v-on:click.self="toggle"
         v-on:keydown.up="search ? false : selectPrevious()"
@@ -96,7 +96,13 @@
             },
             transition: {
                 type: String,
-                default: [Constants.slide, Constants.down].join(' ')
+                default () {
+                    var classes = [Constants.slide]
+
+                    classes.push(this.isUpward ? Constants.up : Constants.down)
+
+                    return classes.join(' ')
+                },
             },
             upward: {
                 type: Boolean,
@@ -127,8 +133,10 @@
                 animating: false,
                 /* Search term */
                 term: '',
-                /* Test */
+                /* Stores the selected item */
                 selected: this.value,
+                /* Automatically show upward */
+                isUpward: this.upward,
             }
         },
         computed: {
@@ -219,22 +227,33 @@ Ignoring item: `, item)
                 return items
             },
             enterActiveClass() {
-                return this.arrayFlatten([
-                                            Constants.animating,
-                                            this.transition,
-                                            Constants.in,
-                                        ]).join(' ');
+                var classes = [Constants.animating]
+
+                if (typeof this.$vnode.componentOptions.propsData.transition == 'undefined') {
+                    classes.push(Constants.slide)
+                    classes.push(this.isUpward ? Constants.up : Constants.down)
+                } else {
+                    classes.push(this.transition)
+                }
+
+                classes.push(Constants.in)
+
+                return this.arrayFlatten(classes).join(' ');
             },
             leaveActiveClass() {
-                return this.arrayFlatten([
-                                            Constants.animating,
-                                            this.transition,
-                                            Constants.out,
-                                        ]).join(' ');
+                var classes = [Constants.animating]
+
+                if (typeof this.$vnode.componentOptions.propsData.transition == 'undefined') {
+                    classes.push(Constants.slide)
+                    classes.push(this.isUpward ? Constants.up : Constants.down)
+                } else {
+                    classes.push(this.transition)
+                }
+
+                classes.push(Constants.out)
+
+                return this.arrayFlatten(classes).join(' ');
             },
-            $upward() {
-                return this.upward
-            }
         },
         watch: {
             isVisible(newVal) {
@@ -246,6 +265,11 @@ Ignoring item: `, item)
                     this.$emit('change')
                 }
             },
+            term(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    this.$emit('search', newVal)
+                }
+            }
         },
         methods: {
             toggle() {
@@ -259,11 +283,11 @@ Ignoring item: `, item)
                     this.$refs.search.focus()
                 }
 
-                if (!this.upward) {
+                if (typeof this.$vnode.componentOptions.propsData.upward == 'undefined') {
                     // get the window height https://gist.github.com/joshcarr/2f861bd37c3d0df40b30
                     var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight
 
-                    var top = this.$el.getBoundingClientRect().top
+                    var bottom = this.$el.getBoundingClientRect().bottom
 
                     // menu element
                     var menu = this.$refs.menu
@@ -272,12 +296,7 @@ Ignoring item: `, item)
                     menu.style.visibility = 'hidden'
                     menu.style.display = 'block'
 
-                    console.log(menu.offsetHeight + top)
-                    console.log(windowHeight)
-
-                    if (menu.offsetHeight + top > windowHeight) {
-                        this.$upward = true
-                    }
+                    this.isUpward = (menu.offsetHeight + bottom > windowHeight)
                     
                     menu.removeAttribute('style')
                 }
