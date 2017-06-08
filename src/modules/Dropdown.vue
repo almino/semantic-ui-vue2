@@ -137,6 +137,8 @@
                 selected: this.value,
                 /* Automatically show upward */
                 isUpward: this.upward,
+                /* Default option selected */
+                default: this.value,
             }
         },
         computed: {
@@ -180,6 +182,10 @@ Ignoring item: `, item)
                         /* Working with basics */
                         sanitized = {
                             value: item,
+                        }
+
+                        if (item == this.value) {
+                            this.selected = sanitized
                         }
                     }
 
@@ -319,10 +325,16 @@ Ignoring item: `, item)
             restoreDefaults() {
             },
             setSelected(value) {
-                if (!value.disabled) {
+                if (this.isObject(value) && typeof value.value != 'undefined' && !value.disabled) {
                     this.selected = value
                     this.term = ''
                     this.hide()
+                } else {
+                    var found = this.$items.filter((val) => val.value == value)
+
+                    if (found.length > 0) {
+                        this.selected = found[0]
+                    }
                 }
             },
             getText() {
