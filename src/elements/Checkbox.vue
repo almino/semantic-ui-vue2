@@ -115,14 +115,6 @@
                 type: String,
                 required: false,
             },
-            transparent: {
-                type: Boolean,
-                required: false,
-                default: false
-                // validator(value) {
-                //     return true
-                // }
-            },
             type: {
                 type: String,
                 required: false,
