@@ -1,19 +1,38 @@
 <template>
     <div>
         <div class="ui container">
-            <div class="ui segment">
+            <div class="ui secondary segment">
                 <ui-checkbox v-model="grid.container">container</ui-checkbox>
                 <ui-checkbox v-model="grid.equalWidth">equal width</ui-checkbox>
                 <ui-input type="number" min="1" max="16" v-model="grid.column">
                     <div class="ui label" slot="right-label">columns per row</div>
                 </ui-input>
-                <ui-dropdown selection v-bind:items="alignments" v-model="grid.align"></ui-dropdown>
+                <ui-dropdown ref="obj" selection v-bind:items="alignments.horizontal" v-model="grid.align" placeholder="horizontal alignment"></ui-dropdown>
+                <ui-checkbox v-model="grid.centered">centered</ui-checkbox>
+                <ui-dropdown selection v-bind:items="floatings" v-model="grid.float" placeholder="floating"></ui-dropdown>
             </div>
         </div>
         <ui-grid v-bind:container="grid.container" v-bind:equal-width="grid.equalWidth" v-bind:column="grid.column" v-bind:align="grid.align"
             v-bind:float="grid.float" v-bind:centered="grid.centered">
             <ui-column v-for="i in columns" key="i">{{ i }}</ui-column>
         </ui-grid>
+        <br><br>
+        <div class="ui divider"></div>
+        <div class="ui container">
+            <div class="ui top attached secondary segment">
+                <ui-checkbox v-model="checkbox.fitted">fitted</ui-checkbox>
+                &emsp;&bullet;
+                <ui-label>input element type</ui-label>
+                <ui-checkbox v-model="checkbox.inputType" type="radio" v-bind:value="types[0]">{{ types[0] }}</ui-checkbox>
+                <ui-checkbox v-model="checkbox.inputType" type="radio" v-bind:value="types[1]">{{ types[1] }}</ui-checkbox>
+                &emsp;&bullet;
+                <ui-label>appearance</ui-label>
+                <ui-dropdown selection v-bind:items="types" v-model="checkbox.type" placeholder="type"></ui-dropdown>
+            </div>
+            <div class="ui bottom attached segment">
+                <ui-checkbox v-bind:fitted="checkbox.fitted" v-bind:label="checkbox.label" v-bind:type="checkbox.type" ></ui-checkbox>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -39,6 +58,16 @@
                         Constants.top,
                     ],
                 },
+                floatings: [
+                    Constants.left,
+                    Constants.right,
+                ],
+                types: [
+                    Constants.checkbox,
+                    Constants.radio,
+                    Constants.slider,
+                    Constants.toggle,
+                ],
                 grid: {
                     container: false,
                     equalWidth: false,
@@ -47,6 +76,12 @@
                     float: undefined,
                     centered: false,
                 },
+                checkbox: {
+                    fitted: false,
+                    inputType: Constants.checkbox,
+                    label: 'Check me',
+                    type: Constants.checkbox,
+                }
             }
         },
         computed: {
@@ -54,6 +89,9 @@
                 return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis arcu lectus, porttitor sit amet erat congue.'
                     .split(' ')
             }
+        },
+        mounted() {
+            // this.$refs.obj.setSelected('right');
         }
     }
 </script>
