@@ -22,15 +22,18 @@
             <div class="ui top attached secondary segment">
                 <ui-checkbox v-model="checkbox.fitted">fitted</ui-checkbox>
                 &emsp;&bullet;
-                <ui-label>input element type</ui-label>
-                <ui-checkbox v-model="checkbox.inputType" type="radio" v-bind:value="types[0]">{{ types[0] }}</ui-checkbox>
-                <ui-checkbox v-model="checkbox.inputType" type="radio" v-bind:value="types[1]">{{ types[1] }}</ui-checkbox>
-                &emsp;&bullet;
                 <ui-label>appearance</ui-label>
                 <ui-dropdown selection v-bind:items="types" v-model="checkbox.type" placeholder="type"></ui-dropdown>
+                &emsp;&bullet;
+                <ui-label>label</ui-label>
+                <ui-input placeholder="label" v-model="checkbox.label"></ui-input>
+                <ui-label>
+                    checked (<code>v-model</code>)
+                    <span class="detail">{{ checkbox.value }}</span>
+                </ui-label>
             </div>
             <div class="ui bottom attached segment">
-                <ui-checkbox v-bind:fitted="checkbox.fitted" v-bind:label="checkbox.label" v-bind:type="checkbox.type" ></ui-checkbox>
+                <ui-checkbox v-bind:fitted="checkbox.fitted" v-bind:label="checkbox.label" v-bind:type="checkbox.type" v-model="checkbox.value"></ui-checkbox>
             </div>
         </div>
     </div>
@@ -81,6 +84,7 @@
                     inputType: Constants.checkbox,
                     label: 'Check me',
                     type: Constants.checkbox,
+                    value: false,
                 }
             }
         },
