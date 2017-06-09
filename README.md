@@ -28,6 +28,7 @@ Import individual components.
 - `Row` – component
 - `Column` – component
 - `Checkbox` – component
+- `Dropdown` – component
 - `Input` – component
 - `Label` – component
 - `Form` – component
