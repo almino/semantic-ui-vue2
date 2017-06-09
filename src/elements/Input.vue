@@ -68,7 +68,8 @@
 
 <script>
 import Constants from '../mixins/commons/constants.js'
-import Input from '../mixins/commons/input'
+import Input from '../mixins/commons/input/'
+import RandomProp from '../mixins/commons/props/random.js'
 import Focus from '../mixins/commons/states/focus.js'
 import Loading from '../mixins/commons/states/loading.js'
 import Error from '../mixins/commons/states/error.js'
@@ -87,6 +88,7 @@ export default {
         }
     },
     props: {
+        id: RandomProp,
         transparent: {
             type: Boolean,
             required: false,

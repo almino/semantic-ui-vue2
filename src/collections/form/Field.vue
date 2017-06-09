@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import Input from '../../mixins/commons/input.js'
+import Input from '../../mixins/commons/input/'
 import RandomProp from '../../mixins/commons/props/random.js'
 import Error from '../../mixins/commons/states/error.js'
 import Width from '../../mixins/commons/width.js'

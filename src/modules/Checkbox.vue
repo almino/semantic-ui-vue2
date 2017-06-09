@@ -1,6 +1,6 @@
 <template lang="html">
     <div v-bind:class="['ui', { 'disabled' : disabled }, { 'fitted' : fitted },
-        { 'read-only' : readonly }, { 'checked' : isChecked },
+        { 'read-only' : readonly }, { 'checked' : isChecked() },
         { 'disabled' : disabled }, typeClass, 'checkbox', { 'focus' : focus },
         { 'error' : error }]">
         <input
@@ -9,7 +9,7 @@
             v-bind:alt="alt"
             v-bind:autocomplete="autocomplete"
             v-bind:autofocus="autofocus"
-            v-bind:checked="isChecked"
+            v-bind:checked="isChecked()"
             v-bind:dirname="dirname"
             v-bind:disabled="disabled"
             v-bind:form="form"
@@ -66,7 +66,8 @@
 
 <script>
     import Constants from '../mixins/commons/constants.js'
-    import Input from '../mixins/commons/input.js'
+    import Input from '../mixins/commons/input/'
+    import RandomProp from '../mixins/commons/props/random.js'
     import Focus from '../mixins/commons/states/focus.js'
     import Error from '../mixins/commons/states/error.js'
 
@@ -93,6 +94,7 @@
             }
         },
         props: {
+            id: RandomProp,
             checked: {
                 type: Boolean,
                 default: undefined,
@@ -141,21 +143,6 @@
 
                 return this.value
             },
-            isChecked() {
-                if (this.usesVueModel()) {
-                    return this.value.indexOf(this.inputValue) > -1
-                }
-
-                if (this.inputType == Constants.radio) {
-                    return this.value == this.$vnode.data.attrs.value;
-                }
-
-                if (this.value !== true && this.value !== false) {
-                    return this.value == this.trueVal
-                }
-
-                return this.value
-            },
             trueVal() {
                 if (typeof this.$vnode.data.attrs == 'undefined') {
                     return null;
@@ -175,7 +162,7 @@
             emitChange(value) {
                 var input = this.$refs.input;
 
-                if (this.inputType == Constants.radio && this.isChecked) {
+                if (this.inputType == Constants.radio && this.isChecked()) {
                     this.$emit('input', this.inputValue);
                 }
 
@@ -211,12 +198,30 @@
                     }
                 }
 
-                this.$emit('change', this.isChecked);
+                this.$emit('change', this.isChecked());
             },
             usesVueModel() {
                 return typeof this.$vnode.data.attrs != 'undefined'
                     && this.$vnode.data.attrs.value
                     && Array.isArray(this.value)
+            },
+            isChecked() {
+                if (this.usesVueModel()) {
+                    return this.value.indexOf(this.inputValue) > -1
+                }
+
+                if (this.inputType == Constants.radio) {
+                    return this.value == this.$vnode.data.attrs.value;
+                }
+
+                if (this.value !== true && this.value !== false) {
+                    return this.value == this.trueVal
+                }
+
+                return this.value
+            },
+            isUnchecked() {
+                return !this.isChecked()
             },
         },
     }

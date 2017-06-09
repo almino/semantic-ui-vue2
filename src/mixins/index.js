@@ -3,8 +3,8 @@ import Form from './form.js'
 
 import Input from '../elements/Input.vue'
 import Label from '../elements/Label.vue'
-import Checkbox from '../elements/Checkbox.vue'
 
+import Checkbox from '../modules/Checkbox.vue'
 import Modal from '../modules/Modal.vue'
 import Dropdown from '../modules/Dropdown.vue'
 
@@ -17,7 +17,7 @@ export default {
         'ui-input': Input,
         'ui-label': Label,
         'ui-checkbox': Checkbox,
-        'ui-modal': Modal,
         'ui-dropdown': Dropdown,
+        'ui-modal': Modal,
     },
 }
