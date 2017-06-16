@@ -4,17 +4,18 @@
             {visible},
             'ui',
             {active},
+            {multiple},
             {search},
             {selection},
             { 'upward' : isUpward },
             'dropdown'
-        ]" v-on:click.self="toggle"
+        ]"
+        v-on:click.self="toggle"
         v-on:keydown.up="search ? false : selectPrevious()"
         v-on:keydown.down="search ? false : selectNext()"
         v-bind:tabindex="search ? '' : 0"
         v-click-outside="hide">
         <input type="hidden" v-bind:name="name" v-if="selection">
-        <i class="dropdown icon" v-on:click="toggle"></i>
         <input type="search" class="search" autocomplete="off" tabindex="0"
             ref="search"
             v-model="term"
@@ -23,11 +24,20 @@
             v-on:keydown.up="selectPrevious"
             v-on:keydown.down="selectNext"
             v-if="search">
+        <template v-if="multiple">
+            <transition-group enter-active-class="scale in" leave-active-class="scale out">
+                <ui-label tag="a" class="transition" v-for="(item, index) in activeItem" v-bind:key="item.key">
+                    {{ item.text || item.value }}
+                    <i class="delete icon" v-on:click="activeItem.splice(index, 1)"></i>
+                </ui-label>
+            </transition-group>
+        </template>
         <div v-bind:class="[
-            { 'default' : typeof selected.value == 'undefined' },
+            { 'default' : typeof activeItem.value == 'undefined' },
             'text',
             { filtered },
-        ]">{{ selected.text || selected.value || placeholder || text }}</div>
+        ]">{{ activeItem.text || activeItem.value || placeholder || text }}</div>
+        <i class="dropdown icon" v-on:click="toggle"></i>
             <transition
                 v-on:before-enter="beforeEnter"
                 v-on:after-enter="afterEnter"
@@ -46,7 +56,8 @@
                                 ref="items"
                                 v-bind:class="[
                                     { 'disabled' : item.disabled },
-                                    { 'active selected' : selected == item && !disabled },
+                                    { 'active' : activeItem == item && !disabled },
+                                    { 'selected' : selected == item && !disabled },
                                     'item'
                                 ]"
                                 v-bind:tabindex="(index + 2) * -1"
@@ -67,9 +78,13 @@
     import ClickOutside from '../mixins/commons/click-outside/'
     import Input from '../mixins/commons/input/'
     import Arrai from '../mixins/commons/arrai.js'
+    import Label from '../elements/Label.vue'
 
     export default {
         mixins: [ClickOutside, Input, Arrai],
+        components: {
+            'ui-label': Label,
+        },
         props: {
             text: {
                 type: String,
@@ -78,6 +93,14 @@
                 type: Array,
                 default: () => [],
             },
+            multiple: {
+                type: Boolean,
+                default: false,
+            },
+            search: {
+                type: Boolean,
+                default: false,
+            },
             selection: {
                 type: Boolean,
                 default() {
@@ -85,10 +108,6 @@
                         && typeof this.$vnode.componentOptions.propsData.search == 'string')
                         || this.$vnode.componentOptions.propsData.search == true
                 },
-            },
-            search: {
-                type: Boolean,
-                default: false,
             },
             fullTextSearch: {
                 type: Boolean,
@@ -135,10 +154,10 @@
                 term: '',
                 /* Stores the selected item */
                 selected: this.value,
+                /* Stores the active item (keyboard navigation) */
+                activeItem: this.multiple ? [this.value] : this.value,
                 /* Automatically show upward */
                 isUpward: this.upward,
-                /* Default option selected */
-                default: this.value,
             }
         },
         computed: {
@@ -185,13 +204,13 @@ Ignoring item: `, item)
                         }
 
                         if (item == this.value) {
-                            this.selected = sanitized
+                            this.activeItem = sanitized
                         }
                     }
 
                     if (this.filtered) {
                         /* Nothing is selected */
-                        this.selected = {}
+                        this.activeItem = this.multiple ? [] : {}
 
                         /* Subjects for regexp */
                         var subjects = this.arrayFlatten([
@@ -219,11 +238,13 @@ Ignoring item: `, item)
                         }
                     } else {
                         if (sanitized.value == this.value) {
-                            this.selected = sanitized;
+                            this.activeItem = sanitized;
                         }
 
                         items.push(sanitized)
                     }
+
+                    sanitized.key = i
                 }
 
                 if (items.length < 1) {
@@ -265,7 +286,7 @@ Ignoring item: `, item)
             isVisible(newVal) {
                 this.active = newVal
             },
-            selected(newVal, oldVal) {
+            activeItem(newVal, oldVal) {
                 if (newVal != oldVal && typeof newVal.value != 'undefined') {
                     this.$emit('input', newVal.value)
                     this.$emit('change')
@@ -310,11 +331,12 @@ Ignoring item: `, item)
             hide() {
                 if (
                     !this.fullTextSearch
+                    && !this.multiple
                     && this.filtered
                     && this.$items.length > 0
                     && !this.isSelected()
                 ) {
-                    this.selected = this.$items[0]
+                    this.activeItem = this.$items[0]
                 }
 
                 this.isVisible = false
@@ -325,23 +347,33 @@ Ignoring item: `, item)
             restoreDefaults() {
             },
             setSelected(value) {
+                /* Has to be an object and have a value attribute and is not disabled */
                 if (this.isObject(value) && typeof value.value != 'undefined' && !value.disabled) {
-                    this.selected = value
+                    if (this.multiple) {
+                        this.activeItem.push(value)
+                    } else {
+                        this.activeItem = value
+                    }
                     this.term = ''
                     this.hide()
                 } else {
+                    /* Look for it in  */
                     var found = this.$items.filter((val) => val.value == value)
 
                     if (found.length > 0) {
-                        this.selected = found[0]
+                        if (this.multiple) {
+                            this.activeItem.push(found[0])
+                        } else {
+                            this.activeItem = found[0]
+                        }
                     }
                 }
             },
             getText() {
-                return this.selected.text || this.selected.value
+                return this.activeItem.text || this.activeItem.value
             },
             getValue() {
-                return this.selected.value
+                return this.activeItem.value
             },
             beforeEnter() {
                 this.visible = true
@@ -350,7 +382,7 @@ Ignoring item: `, item)
             },
             afterEnter() {
                 if (this.isSelected()) {
-                    this.scrollIntoView(this.$items.indexOf(this.selected))
+                    this.scrollIntoView(this.$items.indexOf(this.activeItem))
                 }
 
                 this.visible = true
@@ -376,25 +408,39 @@ Ignoring item: `, item)
                 var pos = this.$items.indexOf(this.selected)
 
                 if (pos > 0) {
-                    this.selected = this.$items[--pos]
-                    // this.$refs.items[pos].scrollIntoView(false)
-                    this.scrollIntoView(pos)
-                }
-            },
-            selectNext() {
-                let pos = this.$items.indexOf(this.selected)
+                    pos--
+                    if (!this.multiple) {
+                        this.activeItem = this.$items[pos]
+                    }
 
-                if (++pos < this.$items.length) {
                     this.selected = this.$items[pos]
                     // this.$refs.items[pos].scrollIntoView(false)
                     this.scrollIntoView(pos)
                 }
             },
+            selectNext() {
+                if (!this.visible) {
+                    this.show()
+                }
+
+                var pos = this.$items.indexOf(this.multiple ? this.selected : this.selected)
+
+                if (++pos < this.$items.length) {
+                    if (!this.multiple) {
+                        this.activeItem = this.$items[pos]
+                    }
+
+                    this.selected = this.$items[pos]
+
+                    // this.$refs.items[pos].scrollIntoView(false)
+                    this.scrollIntoView(pos)
+                }
+            },
             isSelected() {
-                return this.isObject(this.selected)
+                return this.isObject(this.activeItem)
                         && !(
-                                Object.keys(this.selected).length === 0
-                                && this.selected.constructor === Object
+                                Object.keys(this.activeItem).length === 0
+                                && this.activeItem.constructor === Object
                             )
             },
             isObject(instance) {
@@ -416,7 +462,7 @@ Ignoring item: `, item)
         },
         created() {
             if (typeof this.value == 'undefined' || this.value === null) {
-                this.selected = {}
+                this.activeItem = this.multiple ? [] : {}
             }
         },
     }

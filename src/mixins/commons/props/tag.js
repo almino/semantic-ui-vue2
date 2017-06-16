@@ -1,6 +1,6 @@
 export default {
     props: {
-        as: {
+        tag: {
             type: String,
             required: false,
             default: 'div',

@@ -1,14 +1,14 @@
 <template lang="html">
-    <component v-bind:is="as" v-bind:class="['ui', getSizeClasses(), 'label']">
+    <component v-bind:is="tag" v-bind:class="['ui', getSizeClasses(), 'label']">
         <slot></slot>
     </component>
 </template>
 
 <script>
 import Size from '../mixins/commons/sizes/eight.js'
-import As from '../mixins/commons/props/as.js'
+import Tag from '../mixins/commons/props/tag.js'
 
 export default {
-    mixins: [As, Size]
+    mixins: [Tag, Size]
 }
 </script>
