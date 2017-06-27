@@ -2,7 +2,7 @@
     <div v-bind:class="['ui', getSlotsClasses(), getIconClasses(), getSizeClasses(),
         { 'fluid' : fluid }, { 'inverted' : inverted },
         { 'transparent' : transparent }, { 'disabled' : disabled }, 'input',
-        { 'focus' : focus }, { 'loading' : loading }, { 'error' : error }]">
+        { 'loading' : loading }, { 'error' : error }]">
         <slot name="left-label"></slot>
         <slot name="left-action"></slot>
         <input
@@ -70,7 +70,6 @@
 import Constants from '../mixins/commons/constants.js'
 import Input from '../mixins/commons/input/'
 import RandomProp from '../mixins/commons/props/random.js'
-import Focus from '../mixins/commons/states/focus.js'
 import Loading from '../mixins/commons/states/loading.js'
 import Error from '../mixins/commons/states/error.js'
 import Icon from '../mixins/commons/icon.js'
@@ -78,7 +77,7 @@ import Inverted from '../mixins/commons/inverted.js'
 import Size from '../mixins/commons/sizes/six.js'
 
 export default {
-    mixins: [Input, Focus, Loading, Error, Icon, Inverted, Size],
+    mixins: [Input, Loading, Error, Icon, Inverted, Size],
     data() {
         return {
             dIcon: {
