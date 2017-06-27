@@ -147,7 +147,13 @@ export default {
             }
 
             return classes;
-        }
+        },
+        blur() {
+            this.$refs.input.blur()
+        },
+        focus() {
+            this.$refs.input.focus()
+        },
     }
 }
 </script>
