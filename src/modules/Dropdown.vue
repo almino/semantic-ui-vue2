@@ -401,6 +401,9 @@ Ignoring item: `, item)
                 return !Array.isArray(instance) && instance === Object(instance)
             },
             scrollIntoView(pos) {
+                if (pos < 0) {
+                    return
+                }
                 var el = this.$refs.items[pos]
                 var items = Math.floor(el.offsetParent.offsetHeight / el.offsetHeight)
                 var scrollFixer = pos - items;
