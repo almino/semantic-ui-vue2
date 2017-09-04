@@ -64,6 +64,7 @@
                 ref="input" />
             <i v-if="icon" v-bind:class="[icon, 'icon']"></i>
         </div>
+        <div v-if="error_message" class="ui pointing red prompt basic label">Please enter a value</div>
     </div>
 </template>
 
