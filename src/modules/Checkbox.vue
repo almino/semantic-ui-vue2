@@ -1,7 +1,7 @@
 <template lang="html">
     <div v-bind:class="['ui', { 'disabled' : disabled }, { 'fitted' : fitted },
         { 'read-only' : readonly }, { 'checked' : isChecked() },
-        { 'disabled' : disabled }, typeClass, 'checkbox', { 'focus' : focus },
+        typeClass, 'checkbox', { 'focus' : focus },
         { 'error' : error }]">
         <input
             v-bind:id="id"
