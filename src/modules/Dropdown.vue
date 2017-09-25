@@ -4,11 +4,13 @@
             {visible},
             'ui',
             {active},
+            {fluid},
             {multiple},
             {search},
             {selection},
             { 'upward' : isUpward },
-            'dropdown'
+            'dropdown',
+            {error},
         ]"
         v-on:click.self="toggle"
         v-on:keydown.up="search ? false : selectPrevious()"
@@ -16,6 +18,20 @@
         v-bind:tabindex="search ? '' : 0"
         v-click-outside="hide">
         <input type="hidden" v-bind:name="name" v-if="selection">
+        <template v-if="multiple">
+            <transition-group
+                enter-active-class="scale in"
+                leave-active-class="scale out"
+                v-on:before-enter="showText = false"
+                v-on:after-leave="showText = true">
+                <template v-for="(item, index) in activeItem">
+                    <ui-label tag="a" v-if="!isNaN(item.key)" class="transition" v-bind:key="item.key">
+                        {{ item.text || item.value }}
+                        <i class="delete icon" v-on:click="activeItem.splice(index, 1)"></i>
+                    </ui-label>
+                </template>
+            </transition-group>
+        </template>
         <input type="search" class="search" autocomplete="off" tabindex="0"
             ref="search"
             v-model="term"
@@ -24,19 +40,14 @@
             v-on:keydown.up="selectPrevious"
             v-on:keydown.down="selectNext"
             v-if="search">
-        <template v-if="multiple">
-            <transition-group enter-active-class="scale in" leave-active-class="scale out">
-                <ui-label tag="a" class="transition" v-for="(item, index) in activeItem" v-bind:key="item.key">
-                    {{ item.text || item.value }}
-                    <i class="delete icon" v-on:click="activeItem.splice(index, 1)"></i>
-                </ui-label>
-            </transition-group>
-        </template>
-        <div v-bind:class="[
-            { 'default' : typeof activeItem.value == 'undefined' },
-            'text',
-            { filtered },
-        ]">{{ activeItem.text || activeItem.value || placeholder || text }}</div>
+        <div
+            v-bind:class="[
+                { 'default' : typeof activeItem.value == 'undefined' && this.selection },
+                'text',
+                { filtered },
+            ]"
+            v-show="showText"
+            v-on:click="toggle">{{ activeItem.text || activeItem.value || placeholder || text }}</div>
         <i class="dropdown icon" v-on:click="toggle"></i>
             <transition
                 v-on:before-enter="beforeEnter"
@@ -62,6 +73,7 @@
                                 ]"
                                 v-bind:tabindex="(index + 2) * -1"
                                 v-on:focus="setSelected(item)"
+                                v-bind:key="index"
                                 v-for="(item, index) in $items">
                                 {{ item.name ? item.name : item.value }}
                             </div>
@@ -138,7 +150,15 @@
                         noResults: 'No results found.'
                     }
                 }
-            }
+            },
+            error: {
+                type: Boolean,
+                default: false,
+            },
+            fluid: {
+                type: Boolean,
+                default: false,
+            },
         },
         data() {
             return {
@@ -158,6 +178,8 @@
                 activeItem: this.multiple ? [this.value] : this.value,
                 /* Automatically show upward */
                 isUpward: this.upward,
+                /* Is default text visible */
+                showText: true,
             }
         },
         computed: {
@@ -461,8 +483,8 @@ Ignoring item: `, item)
             },
         },
         created() {
-            if (typeof this.value == 'undefined' || this.value === null) {
-                this.activeItem = this.multiple ? [] : {}
+            if ((typeof this.value == 'undefined' || this.value === null) && !this.multiple) {
+                this.activeItem = {}
             }
         },
     }
