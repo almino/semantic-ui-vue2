@@ -15,6 +15,7 @@
         v-on:click.self="toggle"
         v-on:keydown.up="search ? false : selectPrevious()"
         v-on:keydown.down="search ? false : selectNext()"
+        v-on:keydown.enter="setSelected(selected)"
         v-bind:tabindex="search ? '' : 0"
         v-click-outside="hide">
         <input type="hidden" v-bind:name="name" v-if="selection">
@@ -25,7 +26,7 @@
                 v-on:before-enter="showText = false"
                 v-on:after-leave="showText = true">
                 <template v-for="(item, index) in activeItem">
-                    <ui-label tag="a" v-if="!isNaN(item.key)" class="transition" v-bind:key="item.key">
+                    <ui-label tag="a" class="transition" v-bind:key="item.key">
                         {{ item.text || item.value }}
                         <i class="delete icon" v-on:click="activeItem.splice(index, 1)"></i>
                     </ui-label>
@@ -58,21 +59,16 @@
                 v-on:after-leave="afterLeave">
                 <div
                     ref="menu"
-                    v-bind:class="[{visible}, 'transition', 'menu']"
+                    v-bind:class="[{visible}, {'hidden' : !isVisible}, 'transition', 'menu']"
                     tabindex="-1"
                     v-show="isVisible">
                     <slot>
                         <template v-show="$items.length > 0">
                             <div
                                 ref="items"
-                                v-bind:class="[
-                                    { 'disabled' : item.disabled },
-                                    { 'active' : activeItem == item && !disabled },
-                                    { 'selected' : selected == item && !disabled },
-                                    'item'
-                                ]"
+                                v-bind:class="getItemClasses(item)"
                                 v-bind:tabindex="(index + 2) * -1"
-                                v-on:focus="setSelected(item)"
+                                v-on:click.stop="setSelected(item)"
                                 v-bind:key="index"
                                 v-for="(item, index) in $items">
                                 {{ item.name ? item.name : item.value }}
@@ -190,6 +186,14 @@
                 var items = []
                 var sanitized
 
+                if (this.multiple) {
+                    var active = this.activeItem.map(value => {
+                        return value.value
+                    })
+
+                    console.log(active)
+                }
+
                 for (var i = 0; i < this.items.length; i++) {
                     /* Makes it easier to work */
                     var item = this.items[i];
@@ -230,9 +234,15 @@ Ignoring item: `, item)
                         }
                     }
 
+                    if (this.multiple && active.indexOf(sanitized.value) >= 0) {
+                        continue
+                    }
+
                     if (this.filtered) {
-                        /* Nothing is selected */
-                        this.activeItem = this.multiple ? [] : {}
+                        if (!this.multiple) {
+                            /* Nothing is selected */
+                            this.activeItem = {}
+                        }
 
                         /* Subjects for regexp */
                         var subjects = this.arrayFlatten([
@@ -317,8 +327,12 @@ Ignoring item: `, item)
             term(newVal, oldVal) {
                 if (newVal != oldVal) {
                     this.$emit('search', newVal)
+
+                    if (!this.isVisible) {
+                        this.show()
+                    }
                 }
-            }
+            },
         },
         methods: {
             toggle() {
@@ -376,6 +390,7 @@ Ignoring item: `, item)
                     } else {
                         this.activeItem = value
                     }
+
                     this.term = ''
                     this.hide()
                 } else {
@@ -427,15 +442,15 @@ Ignoring item: `, item)
                 this.$emit('hidden')
             },
             selectPrevious() {
-                var pos = this.$items.indexOf(this.selected)
+                var pos = this.$items.indexOf(this.multiple ? this.selected : this.activeItem)
 
-                if (pos > 0) {
-                    pos--
+                if (--pos >= 0) {
+                    this.selected = this.$items[pos]
+
                     if (!this.multiple) {
-                        this.activeItem = this.$items[pos]
+                        this.activeItem = this.selected
                     }
 
-                    this.selected = this.$items[pos]
                     // this.$refs.items[pos].scrollIntoView(false)
                     this.scrollIntoView(pos)
                 }
@@ -443,16 +458,17 @@ Ignoring item: `, item)
             selectNext() {
                 if (!this.visible) {
                     this.show()
+                    return
                 }
 
-                var pos = this.$items.indexOf(this.multiple ? this.selected : this.selected)
+                var pos = this.$items.indexOf(this.multiple ? this.selected : this.activeItem)
 
                 if (++pos < this.$items.length) {
-                    if (!this.multiple) {
-                        this.activeItem = this.$items[pos]
-                    }
-
                     this.selected = this.$items[pos]
+
+                    if (!this.multiple) {
+                        this.activeItem = this.selected
+                    }
 
                     // this.$refs.items[pos].scrollIntoView(false)
                     this.scrollIntoView(pos)
@@ -480,6 +496,45 @@ Ignoring item: `, item)
                 if (el.offsetTop < el.offsetParent.scrollTop) {
                     el.scrollIntoView()
                 }
+            },
+            getItemClasses(item) {
+                // [
+                //     {
+                //         'disabled': item.disabled
+                //     },
+                //     {
+                //         'active': activeItem == item && !disabled
+                //     },
+                //     {
+                //         'selected': selected == item && !disabled
+                //     },
+                //     'item'
+                // ]
+
+                var classes = [Constants.item]
+
+                if (
+                    this.activeItem != null
+                    && item.value == this.activeItem.value
+                    && !item.disabled
+                ) {
+                    classes.unshift(Constants.active)
+                }
+
+                if (item.disabled) {
+                    classes.unshift(Constants.disabled)
+                    return classes
+                }
+
+                if (
+                    this.selected != null
+                    && item.value == this.selected.value
+                    && !item.disabled
+                ) {
+                    classes.unshift(Constants.selected)
+                }
+
+                return classes
             },
         },
         created() {
