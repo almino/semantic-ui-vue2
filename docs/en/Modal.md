@@ -2,6 +2,11 @@
 
 A modal displays content that temporarily blocks interactions with the main view of a site
 
+## Requirements
+
+- `semantic/components/modal[.min].css` or `semantic/src/definitions/modules/modal.less`
+- `semantic/components/transition[.min].css` or `semantic/src/definitions/modules/transition.less`
+
 ## Attributes
 
 Type |Attribute | Default | Description
