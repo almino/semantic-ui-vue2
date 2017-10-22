@@ -253,3 +253,11 @@
         },
     }
 </script>
+
+<style scoped>
+    .modal {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+</style>
