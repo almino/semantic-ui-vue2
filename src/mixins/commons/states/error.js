@@ -8,5 +8,9 @@ export default {
             //     return true
             // },
         },
+        error_message: {
+            type: String,
+            required: false,
+        }
     }
 }
