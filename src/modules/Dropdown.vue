@@ -1,6 +1,7 @@
 <template>
     <div
         v-bind:class="[
+            {fluid},
             {visible},
             'ui',
             {active},
@@ -50,7 +51,7 @@
                                     'item'
                                 ]"
                                 v-bind:tabindex="(index + 2) * -1"
-                                v-on:focus="setSelected(item)"
+                                v-on:click.stop="setSelected(item)"
                                 v-for="(item, index) in $items">
                                 {{ item.name ? item.name : item.value }}
                             </div>
@@ -119,6 +120,11 @@
                         noResults: 'No results found.'
                     }
                 }
+            },
+            fluid: {
+                type: Boolean,
+                required: false,
+                default: false
             }
         },
         data() {
